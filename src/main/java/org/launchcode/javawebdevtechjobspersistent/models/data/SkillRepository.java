@@ -5,8 +5,7 @@ import org.launchcode.javawebdevtechjobspersistent.models.Job;
 import org.springframework.data.repository.CrudRepository;
 
 
-
 @Repository
-public interface EmployerRepository extends CrudRepository <Job, Integer> {
+public interface SkillRepository extends CrudRepository <Job, Integer> {
 
 }
