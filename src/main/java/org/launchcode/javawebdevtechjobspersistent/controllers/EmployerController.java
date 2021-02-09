@@ -35,20 +35,34 @@ public class EmployerController {
         //employerRepository.save(newEmployer);
 
         employerRepository.save(newEmployer);
+        //model.addAttribute(new Employer());
+        // model.addAttribute("newEmployer",newEmployer);
         return "redirect:";
     }
 
-    @GetMapping("view/{employerId}")
-    public String displayViewEmployer(Model model, @PathVariable int employerId) {
 
+    @GetMapping("")
+    public String index(Model model){
+        model.addAttribute("employers",employerRepository.findAll());
+        return "employers/index";
+    }
+
+    @GetMapping("view/{employerId}")
+    public String displayViewEmployer(Model model, @PathVariable int employerId) { //I can't remember if i added in employerID, or if it was already there
+            //public String displayViewEmployer(Model model, @PathVariable )
         //Optional optEmployer = null;
         Optional optEmployer = employerRepository.findById(employerId);
         if (optEmployer.isPresent()) {
             Employer employer = (Employer) optEmployer.get();
-            model.addAttribute("employer", employer);
+            model.addAttribute("employer",employer);
+
             return "employers/view";
         } else {
+
+
             return "redirect:../";
+
         }
+
     }
 }

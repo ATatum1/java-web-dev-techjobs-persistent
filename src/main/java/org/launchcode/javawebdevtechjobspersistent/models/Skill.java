@@ -6,24 +6,24 @@ import javax.validation.constraints.NotBlank;
 @Entity
 public class Skill extends AbstractEntity {
 
+
+
     @NotBlank(message ="Description is required")
     //@Size(min = 3, max= 255, message= "Skill description must be between 3 and 255 characters")
     private String description;
 
-    public Skill(String description){
-        this.description = description;
-    }
+
 
     public Skill(){};
 
-
-
-    public String getSkill() {
+    public String getDescription() {
         return description;
     }
 
-    public void setSkill(String skillDescription) {
+    public void setDescription(String description) {
         this.description = description;
     }
+
+
 
 }
