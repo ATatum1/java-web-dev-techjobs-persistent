@@ -1,7 +1,11 @@
 package org.launchcode.javawebdevtechjobspersistent.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 //@Entity
 //public class Job{
@@ -17,53 +21,45 @@ import javax.validation.constraints.NotNull;
     //private String name;
 
 
-    @ManyToOne
-    @NotNull(message ="Category is required")
+    @ManyToOne()
     private Employer employer;
-    private String skills;
+
+    //@ManyToMany(mappedBy ="jobs")
+    @ManyToMany()
+    private  List<Skill> skills = new ArrayList<>();
+
 
     public Job() {
     }
 
-    //public Job(String anEmployer, String someSkills) {
-      public Job(String someSkills, Employer employer) {
-        super();
-        //this.employer = anEmployer;
-          this.employer = employer;
-        this.skills = someSkills;
-    }
+        public Job(Employer employer, Skill skills) {
+            this.employer = employer;
 
-    // Getters and setters.
+           // this.skills = skills;
+        }
 
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
+        // Getters and setters.
 
-//    public String getEmployer() {
-//        return employer;
-//    }
-//
-//    public void setEmployer(String employer) {
-//        this.employer = employer;
-//    }
+        public List<Skill> getSkills() {
+            return skills;
+        }
 
-    public String getSkills() {
-        return skills;
-    }
 
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
 
-        public Employer getEmployer() { //added after updating String to Employer
+
+        public void setSkills(List<Skill> skills) {
+            this.skills = skills;
+        }
+
+        public void addSkill(Skill skills){
+            this.skills.add(skills);
+        }
+
+    public Employer getEmployer() { //added after updating String to Employer
             return employer;
         }
 
-        public void setEmployer(Employer employer) {//added after updating String to Employer
+    public void setEmployer(Employer employer) {//added after updating String to Employer
             this.employer = employer;
         }
 }

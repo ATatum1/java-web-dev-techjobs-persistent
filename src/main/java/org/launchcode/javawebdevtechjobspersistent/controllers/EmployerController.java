@@ -24,12 +24,19 @@ public class EmployerController {
         model.addAttribute(new Employer());
         return "employers/add";
     }
+    @GetMapping ("")
+    public String index(Model model){
+        model.addAttribute("employers",employerRepository.findAll());
+        return "employers/index";
+    }
 
     @PostMapping("add")
     public String processAddEmployerForm(@ModelAttribute @Valid Employer newEmployer,
                                     Errors errors, Model model) {
 
         if (errors.hasErrors()) {
+            model.addAttribute("title","Add Employer"); //needed?
+            model.addAttribute("employers",employerRepository.findAll()); //needed?
             return "employers/add";
         }
         //employerRepository.save(newEmployer);
@@ -41,14 +48,10 @@ public class EmployerController {
     }
 
 
-    @GetMapping("")
-    public String index(Model model){
-        model.addAttribute("employers",employerRepository.findAll());
-        return "employers/index";
-    }
+
 
     @GetMapping("view/{employerId}")
-    public String displayViewEmployer(Model model, @PathVariable int employerId) { //I can't remember if i added in employerID, or if it was already there
+    public String displayViewEmployer(Model model, @PathVariable int employerId) {
             //public String displayViewEmployer(Model model, @PathVariable )
         //Optional optEmployer = null;
         Optional optEmployer = employerRepository.findById(employerId);

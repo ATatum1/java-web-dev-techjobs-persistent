@@ -2,8 +2,10 @@ package org.launchcode.javawebdevtechjobspersistent.controllers;
 
 import org.launchcode.javawebdevtechjobspersistent.models.Employer;
 import org.launchcode.javawebdevtechjobspersistent.models.Job;
+import org.launchcode.javawebdevtechjobspersistent.models.Skill;
 import org.launchcode.javawebdevtechjobspersistent.models.data.EmployerRepository;
 import org.launchcode.javawebdevtechjobspersistent.models.data.JobRepository;
+import org.launchcode.javawebdevtechjobspersistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,9 @@ public class HomeController {
     @Autowired
     private JobRepository jobRepository;
 
+    @Autowired
+    private SkillRepository skillRepository;
+
     @RequestMapping("")
     public String index(Model model) {
 
@@ -42,50 +47,68 @@ public class HomeController {
 
     @GetMapping("add")
     public String displayAddJobForm(Model model) {
-        model.addAttribute("title", "Add Job");
+        //model.addAttribute("title", "Add Job");
+        model.addAttribute("employers", employerRepository.findAll());
+        model.addAttribute("skills", skillRepository.findAll());
         model.addAttribute(new Job());
-        model.addAttribute("employers",employerRepository.findAll()); //added
         return "add";
     }
 
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
-                                       Errors errors, Model model, @RequestParam int employerId,@RequestParam List<Integer> skills) {
-        //Optional optJob = employerRepository.findById(employerId); //added
-        Optional optEmployer = employerRepository.findById(employerId);
+                                    Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
+
+
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Add Job");
+            model.addAttribute("employers", employerRepository.findAll());
+            model.addAttribute("skills", skillRepository.findAll());
             return "add";
-        }//else  {
+        }
+
+        Optional<Employer> optEmployer = employerRepository.findById(employerId);
 
         if (optEmployer.isPresent()) {
-            Employer employer = (Employer) optEmployer.get();
-            //model.addAttribute("employer",employer);
 
+            Employer employer = optEmployer.get();
             newJob.setEmployer(employer);
-//            Job job = (Job) optJob.get();
-//            model.addAttribute("employerId", employerId);
+            model.addAttribute("employerId", employerId);
 
-            //select the employer object that has been chosen to be affiliated with the new job
+            List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+            newJob.setSkills(skillObjs);
 
-            //jobRepository.save(employerId);
-            //model.addAttribute("employerId",employerId);
-            //employerRepository.findById(employerId);
+            jobRepository.save(newJob);
+            return "redirect:";
 
-            //model.addAttribute("employerId",jobRepository.save(Employer) Employer employerId));
-            //optEmployer = employerRepository.findById(employerId);
-            //newJob = employerRepository.findById(employerId);
 
+        } else {
+            return "add";
 
         }
-        return "redirect:";
     }
 
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
+        //Optional<Employer> optEmployer = employerRepository.findById(employerId);
+
+//        Optional optJob = jobRepository.findById(jobId);
+//        if (optJob.isPresent()) {
+//            Job job = (Job) optJob.get();
+//            model.addAttribute("job", job);
+
+        Optional<Job> optJob = jobRepository.findById(jobId);
+        if(optJob.isPresent()){
+            Job job = (Job) optJob.get();
+            model.addAttribute("job",job);
+        }
+
 
         return "view";
-    }
+//    } else{
+//
+//
+//        return "redirect:../";
+//    }
+}
 
 
 

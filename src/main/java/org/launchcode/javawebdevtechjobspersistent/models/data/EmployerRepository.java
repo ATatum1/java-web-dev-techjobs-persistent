@@ -7,7 +7,9 @@ import org.launchcode.javawebdevtechjobspersistent.models.Employer;
 
 
 
+
 @Repository
+
 public interface EmployerRepository extends CrudRepository <Employer, Integer> {
 
 }

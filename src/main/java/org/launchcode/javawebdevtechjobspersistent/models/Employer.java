@@ -1,6 +1,7 @@
 package org.launchcode.javawebdevtechjobspersistent.models;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -14,15 +15,27 @@ public class Employer extends AbstractEntity {
 
 
 
+
     @NotBlank(message ="Location is required")
-    //@Size(min = 3, max= 255, message= "Location must be between 3 and 255 characters")
+    @Size(min = 2, max= 255, message= "Location must be between 3 and 255 characters")
     private String location;
 
-    @OneToMany
-    @JoinColumn
-    private List<Job> jobs = new ArrayList<>();
+//    @NotBlank(message ="Name is required")
+//    @Size(min = 2, max= 255, message= "Name must be between 2 and 255 characters")
+//    private String name;
 
-    public Employer(){};
+    @JoinColumn(name="employer_id")
+    @OneToMany()
+    private final List<Job> jobs = new ArrayList<>();
+
+
+    public Employer(){}
+
+
+    public Employer(String location) {
+        this.location = location;
+
+    }
 
     public String getLocation() {
         return location;
@@ -33,11 +46,14 @@ public class Employer extends AbstractEntity {
     }
 
 
-//    public String getLocation() {
-//        return location;
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+//    public void setJobs(List<Job> jobs) {
+//        this.jobs = jobs;
 //    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
+
+
+
 }
